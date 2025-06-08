@@ -24,10 +24,8 @@ namespace LAB_CHM
         {
             return Math.Exp( Math.Pow( Math.Sin(Math.PI*x*y),2 ) );
         }
-        double f1(double x, double y) // Функция полученная через Лапласса
+        double f1(double x, double y) // Функция полученная через оператор Лапласса
         {
-            //return (2*(2*Math.Pow(x,2)-1)*Math.Exp(0-Math.Pow(x,2)-Math.Pow(y,2)+1) + 2 * (2 * Math.Pow(y, 2) - 1) * Math.Exp(0 - Math.Pow(x, 2) - Math.Pow(y, 2) + 1));
-            //return -4 * Math.Exp(1 - Math.Pow(x, 2) - Math.Pow(y, 2)) * (x * x + y * y - 1);
             double pi = Math.PI;
             double sinTerm = Math.Sin(2 * pi * x * y);
             double cosTerm = Math.Cos(2 * pi * x * y);
@@ -64,18 +62,18 @@ namespace LAB_CHM
 
         double mu4(double x) //Граничное условие 4
         {
-            //return 1 - x * x;
             return x - x*x;
         }
 
-        double optimal_W(double n,double m)
+        double optimal_W(double n,double m) //Подсчёт оптимального параметра W
         {
-            double w_res = 0.0;
-            double l = 1 - 0.5 * (1 / (Math.Pow((1 / (1 / n)), 2) + Math.Pow((1 / (1 / m)), 2))) * 4 * (Math.Pow((Math.Sin(Math.PI / (n * 2)) / ((1 / n))), 2) + Math.Pow((Math.Sin(Math.PI / (m * 2)) / ((1 / m))), 2));
+            //double w_res = 0.0;
+            //double l = 1 - 0.5 * (1 / (Math.Pow((1 / (1 / n)), 2) + Math.Pow((1 / (1 / m)), 2))) * 
+            //                      4 * (Math.Pow((Math.Sin(Math.PI / (n * 2)) / ((1 / n))), 2) + 
+            //                      Math.Pow((Math.Sin(Math.PI / (m * 2)) / ((1 / m))), 2));
 
-            //double l = 1 - 0.5 * (1 / ( Math.Pow((1 / (2 / n)), 2) + Math.Pow((1 / (2 / m)), 2)) ) * 4 * (Math.Pow((Math.Sin(Math.PI / (n * 2))/((2 / n))), 2) + Math.Pow((Math.Sin(Math.PI / (m * 2)) / ((2 / m))), 2));
-            w_res = 2 / (1 + Math.Sqrt(1-Math.Pow(l,2)));
-            return w_res;
+            //w_res = 2 / (1 + Math.Sqrt(1-Math.Pow(l,2)));
+            return 2.0/(1.0 + Math.Sin(Math.PI/(double)n));
         }
 
         private void label46_Click(object sender, EventArgs e)
@@ -88,34 +86,33 @@ namespace LAB_CHM
 
         }
 
-        //РАБОТАЕТ ВЕРНО, КАК ПО ПРОГЕ КАПКАЕВА
-        //Вынес массивы для передачу в отрисовку
-        double[][] v1;
-        double[][] u;
-        double[][] v2;
-        double[][] v2_2;
+        double[][] v1;   //Массив для численного решения тестовой задачи
+        double[][] u;    //Массив для зачений тестовой функции
+        double[][] v2;   //Массив для численного решения тестовой задачи 
+        double[][] v2_2; //Массив для численного решения тестовой задачи  с половинным шагом
 
         //Тестовая
         private void button1_Click(object sender, EventArgs e)
         {
             int n = Convert.ToInt32(textBox1.Text);
             int m = Convert.ToInt32(textBox2.Text);
-            int N_max = Convert.ToInt32(textBox3.Text);
+            int N_max = Convert.ToInt32(textBox3.Text);       //Ограничение по числу итераций
             double Eps = Convert.ToDouble(textBox4.Text);
-            double h = 1.0 / (double)n, k = 1.0 / (double)m; //Шаги по x и y
-            double h2 = -1.0 / (h * h), k2 = -1.0 / (k * k); 
+            double h = 1.0 / (double)n, k = 1.0 / (double)m;  //Шаги по x и y
+            double h2 = 1.0 / (h * h), k2 = 1.0 / (k * k); 
             double A = -2 * (h2 + k2);
-            //double[][] v1;
             double[][] f;
-            //double[][] u;
             double[] x, y;
-            int p = 0; //Текущее число итераций
-            char[] buffer = new char[65535 / (n + 2)];
-            double MaxPogr = 0.0;
-            double Pogr;
-            double MaxF = 0.0;
-            double maxR1 = 0.0;
+            int p = 0;                                        //Текущее число итераций
+            
+            double MaxPogr = 0.0;                             //Максимальная погрешность
+            double Pogr;                                      //Текущая огрешность
+            double MaxF = 0.0;                                //Максимальная невязка на начальном приближении
+            double maxR1 = 0.0;                               //Невязка решения (норма максимума)
+            double evcR1 = 0.0;                               //Невязка решения (евклидова)
 
+
+            char[] buffer = new char[65535 / (n + 2)];
             x = new double[n + 1];
             y = new double[m + 1];
             v1 = new double[n + 1][];
@@ -171,7 +168,12 @@ namespace LAB_CHM
             {
                 for (int i = 1; i < n; i++)
                 {
-                    v1[i][j] = 0.0;
+                    //v1[i][j] = 0.0;
+                    double alpha = i * h;
+                    v1[i][j] = (1 - alpha) * v1[0][j] + alpha * v1[n][j];
+
+                    //double alpha = (x[i] - 0) / 2.0; // alpha ∈ [0, 1]
+                    //v1[i][j] = v1[0][j] + alpha * (v1[n][j] - v1[0][j]);
                 }
             }
 
@@ -185,10 +187,11 @@ namespace LAB_CHM
             if (checkBox1.Checked)
             {
                 w = w_opt;
-                textBox30.Text = Convert.ToString(w_opt);
+                
             }
+            textBox30.Text = Convert.ToString(w);
 
-            var progressForm = new FormProgress1();
+                var progressForm = new FormProgress1();
             progressForm.Show();
 
             int totalIterations = N_max;
@@ -203,17 +206,27 @@ namespace LAB_CHM
                     for (int i = 1; i < n; i++)
                     {
 
-                        prev = v1[i][j]; 
-                        temp = -w * (h2 * (v1[i + 1][j] + v1[i - 1][j]) + k2 * (v1[i][j + 1] + v1[i][j - 1]));
-                        temp = temp + (1 - w) * A * v1[i][j] + w * f[i][j];
-                        temp = temp / A;
+                        //prev = v1[i][j];
+                        //temp = -w * (h2 * (v1[i + 1][j] + v1[i - 1][j]) + k2 * (v1[i][j + 1] + v1[i][j - 1]));
+                        //temp = temp + (1 - w) * A * v1[i][j] + w * f[i][j];
+                        //temp = temp / A;
+
+
+                        prev = v1[i][j];
+                        temp = (-1.0 / (double)A) *
+                               ((1 - w) * (-1) * A * v1[i][j] +
+                                  w * (h2 * (v1[i + 1][j] + v1[i - 1][j]) + k2 * (v1[i][j + 1] + v1[i][j - 1])) +
+                                  w * f[i][j]
+                               );
+
                         currentEps = Math.Abs(prev - temp);
-                        if (currentEps > Eps_max) { Eps_max = currentEps; };
+                        if (currentEps > Eps_max) { Eps_max = currentEps; }
+                      
                         v1[i][j] = temp;
 
                     }
                 }
-
+            
                 currentIteration++;
 
                 // Обновляем прогресс
@@ -227,49 +240,51 @@ namespace LAB_CHM
 
             progressForm.Close();
 
-            // nevyazka na vyhode
+            // Подсчёт невязки
             temp = 0.0;
+            evcR1 = 0.0;
             for (int j = 1; j < m; j++)
             {
                 for (int i = 1; i < n; i++)
                 {
-                    temp = A * v1[i][j] + h2 * (v1[i - 1][j] + v1[i + 1][j]) + k2 * (v1[i][j - 1] + v1[i][j + 1]) - f1(x[i], y[j]);
+                    
+                    temp = (-1) * A * v1[i][j] - h2 * (v1[i - 1][j] + v1[i + 1][j]) - k2 * (v1[i][j - 1] + v1[i][j + 1]) - f1(x[i], y[j]);
+                    evcR1 += temp * temp;
                     if (Math.Abs(temp) >= maxR1) maxR1 = Math.Abs(temp);
-                    //maxR1 += temp * temp;
                 }
             }
-            maxR1 = Math.Sqrt(maxR1);
+            evcR1 = Math.Sqrt(evcR1);
 
             //table
 
 
 
-            dataGridView1.Rows.Clear();
-            dataGridView1.Columns.Clear();
-            dataGridView1.Columns.Add("C1", "");
-            dataGridView1.Columns[0].Width = 50;
-            dataGridView1.Columns[0].Frozen = true;
-            dataGridView1.Columns.Add("C2", "i");
-            dataGridView1.Columns[1].Width = 50;
-            dataGridView1.Columns[1].Frozen = true;
+            //dataGridView1.Rows.Clear();
+            //dataGridView1.Columns.Clear();
+            //dataGridView1.Columns.Add("C1", "");
+            //dataGridView1.Columns[0].Width = 50;
+            //dataGridView1.Columns[0].Frozen = true;
+            //dataGridView1.Columns.Add("C2", "i");
+            //dataGridView1.Columns[1].Width = 50;
+            //dataGridView1.Columns[1].Frozen = true;
 
-            dataGridView2.Rows.Clear();
-            dataGridView2.Columns.Clear();
-            dataGridView2.Columns.Add("C2", "");
-            dataGridView2.Columns[0].Width = 50;
-            dataGridView2.Columns[0].Frozen = true;
-            dataGridView2.Columns.Add("C3", "i");
-            dataGridView2.Columns[1].Width = 50;
-            dataGridView2.Columns[1].Frozen = true;
+            //dataGridView2.Rows.Clear();
+            //dataGridView2.Columns.Clear();
+            //dataGridView2.Columns.Add("C2", "");
+            //dataGridView2.Columns[0].Width = 50;
+            //dataGridView2.Columns[0].Frozen = true;
+            //dataGridView2.Columns.Add("C3", "i");
+            //dataGridView2.Columns[1].Width = 50;
+            //dataGridView2.Columns[1].Frozen = true;
 
-            dataGridView3.Rows.Clear();
-            dataGridView3.Columns.Clear();
-            dataGridView3.Columns.Add("C4", "");
-            dataGridView3.Columns[0].Width = 50;
-            dataGridView3.Columns[0].Frozen = true;
-            dataGridView3.Columns.Add("C5", "i");
-            dataGridView3.Columns[1].Width = 50;
-            dataGridView3.Columns[1].Frozen = true;
+            //dataGridView3.Rows.Clear();
+            //dataGridView3.Columns.Clear();
+            //dataGridView3.Columns.Add("C4", "");
+            //dataGridView3.Columns[0].Width = 50;
+            //dataGridView3.Columns[0].Frozen = true;
+            //dataGridView3.Columns.Add("C5", "i");
+            //dataGridView3.Columns[1].Width = 50;
+            //dataGridView3.Columns[1].Frozen = true;
 
             ////var progressForm3 = new FormProgress1();
             ////progressForm3.Show();
@@ -303,68 +318,68 @@ namespace LAB_CHM
             //    // Application.DoEvents();
             //}
             //progressForm3.Close();
-            using (var progressForm3 = new FormProgress1())
-            {
-                progressForm3.Show();
-                int totalColumns = n + 1;
+            //using (var progressForm3 = new FormProgress1())
+            //{
+            //    progressForm3.Show();
+            //    int totalColumns = n + 1;
 
-                for (int i = 0; i <= n; i++)
-                {
-                    // UI-операции в главном потоке
-                    this.Invoke((MethodInvoker)delegate
-                    {
-                        dataGridView1.Columns.Add($"Column{i}", $"Column {i}");
-                        dataGridView2.Columns.Add($"Column{i}", $"Column {i}");
-                        dataGridView3.Columns.Add($"Column{i}", $"Column {i}");
+            //    for (int i = 0; i <= n; i++)
+            //    {
+            //        // UI-операции в главном потоке
+            //        this.Invoke((MethodInvoker)delegate
+            //        {
+            //            dataGridView1.Columns.Add($"Column{i}", $"Column {i}");
+            //            dataGridView2.Columns.Add($"Column{i}", $"Column {i}");
+            //            dataGridView3.Columns.Add($"Column{i}", $"Column {i}");
 
-                        int fillWeight = 65535 / (n + 2);
-                        dataGridView1.Columns[i].FillWeight = fillWeight;
-                        dataGridView2.Columns[i].FillWeight = fillWeight;
-                        dataGridView3.Columns[i].FillWeight = fillWeight;
-                    });
+            //            int fillWeight = 65535 / (n + 2);
+            //            dataGridView1.Columns[i].FillWeight = fillWeight;
+            //            dataGridView2.Columns[i].FillWeight = fillWeight;
+            //            dataGridView3.Columns[i].FillWeight = fillWeight;
+            //        });
 
-                    // Обновление прогресса
-                    int percent = (int)((double)(i + 1) / totalColumns * 100);
-                    progressForm3.UpdateProgress(percent, $"Создание столбцов: {i + 1} из {totalColumns}");
+            //        // Обновление прогресса
+            //        int percent = (int)((double)(i + 1) / totalColumns * 100);
+            //        progressForm3.UpdateProgress(percent, $"Создание столбцов: {i + 1} из {totalColumns}");
 
-                    if (i % 10 == 0)
-                        Application.DoEvents();
-                }
+            //        if (i % 10 == 0)
+            //            Application.DoEvents();
+            //    }
 
-                progressForm3.Close();
-            }
+            //    progressForm3.Close();
+            //}
 
-            dataGridView1.Rows.Add("j", "Y\\X");  // Создание второй строки
-            dataGridView2.Rows.Add("j", "Y\\X");  // Создание второй строки
-            dataGridView3.Rows.Add("j", "Y\\X");  // Создание второй строки
+            //dataGridView1.Rows.Add("j", "Y\\X");  // Создание второй строки
+            //dataGridView2.Rows.Add("j", "Y\\X");  // Создание второй строки
+            //dataGridView3.Rows.Add("j", "Y\\X");  // Создание второй строки
 
-            for (int i = 0; i <= n; i++)               //Заполнение второй строки
-            {
-                dataGridView1.Columns[i + 2].HeaderText = i.ToString();
-                dataGridView2.Columns[i + 2].HeaderText = i.ToString();
-                dataGridView3.Columns[i + 2].HeaderText = i.ToString();
+            //for (int i = 0; i <= n; i++)               //Заполнение второй строки
+            //{
+            //    dataGridView1.Columns[i + 2].HeaderText = i.ToString();
+            //    dataGridView2.Columns[i + 2].HeaderText = i.ToString();
+            //    dataGridView3.Columns[i + 2].HeaderText = i.ToString();
 
-                dataGridView1.Rows[0].Cells[i + 2].Value = x[i];//+2
-                dataGridView2.Rows[0].Cells[i + 2].Value = x[i];
-                dataGridView3.Rows[0].Cells[i + 2].Value = x[i];
+            //    dataGridView1.Rows[0].Cells[i + 2].Value = x[i];//+2
+            //    dataGridView2.Rows[0].Cells[i + 2].Value = x[i];
+            //    dataGridView3.Rows[0].Cells[i + 2].Value = x[i];
 
-            }
-            for (int j = 0; j <= m; j++)          //Заполнение первых двух столбцов
-            {
-                dataGridView1.Rows.Add();
-                dataGridView2.Rows.Add();
-                dataGridView3.Rows.Add();
+            //}
+            //for (int j = 0; j <= m; j++)          //Заполнение первых двух столбцов
+            //{
+            //    dataGridView1.Rows.Add();
+            //    dataGridView2.Rows.Add();
+            //    dataGridView3.Rows.Add();
 
-                for (int i = 0; i <= 1; i++)
-                {
-                    dataGridView1.Rows[j + 1].Cells[0].Value = j;
-                    dataGridView1.Rows[j + 1].Cells[1].Value = y[j];
-                    dataGridView2.Rows[j + 1].Cells[0].Value = j;
-                    dataGridView2.Rows[j + 1].Cells[1].Value = y[j];
-                    dataGridView3.Rows[j + 1].Cells[0].Value = j;
-                    dataGridView3.Rows[j + 1].Cells[1].Value = y[j];
-                }
-            }
+            //    for (int i = 0; i <= 1; i++)
+            //    {
+            //        dataGridView1.Rows[j + 1].Cells[0].Value = j;
+            //        dataGridView1.Rows[j + 1].Cells[1].Value = y[j];
+            //        dataGridView2.Rows[j + 1].Cells[0].Value = j;
+            //        dataGridView2.Rows[j + 1].Cells[1].Value = y[j];
+            //        dataGridView3.Rows[j + 1].Cells[0].Value = j;
+            //        dataGridView3.Rows[j + 1].Cells[1].Value = y[j];
+            //    }
+            //}
             double xMax = 0.0;
             double yMax = 0.0;
 
@@ -379,14 +394,14 @@ namespace LAB_CHM
                 for (int i = 0; i <= n; i++)
                 {
                     Pogr = Math.Abs(u[i][j] - v1[i][j]);
-                    v1[i][j] = Math.Round(v1[i][j] * 100000) / 100000;
-                    u[i][j] = Math.Round(u[i][j] * 100000) / 100000;
+                    //v1[i][j] = Math.Round(v1[i][j] * 100000) / 100000;
+                    //u[i][j] = Math.Round(u[i][j] * 100000) / 100000;
 
-                    dataGridView1.Rows[j + 1].Cells[i + 2].Value = u[i][j];
+                    //dataGridView1.Rows[j + 1].Cells[i + 2].Value = u[i][j];
 
-                    dataGridView2.Rows[j + 1].Cells[i + 2].Value = v1[i][j];
+                    //dataGridView2.Rows[j + 1].Cells[i + 2].Value = v1[i][j];
 
-                    dataGridView3.Rows[j + 1].Cells[i + 2].Value = Pogr;
+                    //dataGridView3.Rows[j + 1].Cells[i + 2].Value = Pogr;
 
                     if (Pogr > MaxPogr)
                     {
@@ -406,7 +421,7 @@ namespace LAB_CHM
                     Application.DoEvents();
 
             }
-            progressForm2.Close();
+           progressForm2.Close();
 
             // Справка
             textBox9.Text = Convert.ToString(p);
@@ -414,10 +429,11 @@ namespace LAB_CHM
             textBox11.Text = Convert.ToString(MaxPogr);
             textBox15.Text = Convert.ToString(MaxF);
             textBox16.Text = Convert.ToString(maxR1);
+            textBox29.Text = Convert.ToString(evcR1);
             textBox12.Text = Convert.ToString(xMax);
             textBox13.Text = Convert.ToString(yMax);
 
-            textBox14.Text = "Нулевое начальноe приближение";
+            textBox14.Text = "Линейная интерполяция по Х";
 
         }
         //ПРОВЕРКА НА ДОСТОВЕРНОСТЬ ИДЁТ
@@ -430,7 +446,7 @@ namespace LAB_CHM
             int N_max = Convert.ToInt32(textBox6.Text);
             double Eps = Convert.ToDouble(textBox5.Text);
             double h = 1.0 / n, k = 1.0 / m; //Шаги по x и y
-            double h2 = -1.0 / (h * h), k2 = -1.0 / (k * k); 
+            double h2 = 1.0 / (h * h), k2 = 1.0 / (k * k);
             double A = -2 * (h2 + k2);
             //double[][] v2;
             double[][] f;
@@ -449,6 +465,8 @@ namespace LAB_CHM
             y = new double[m + 1];
             v2 = new double[n + 1][];
             f = new double[n + 1][];
+
+            int percent;
 
             for (int i = 0; i <= n; i++)
             {
@@ -493,7 +511,9 @@ namespace LAB_CHM
             {
                 for (int i = 1; i < n; i++)
                 {
-                    v2[i][j] = 0.0;
+                    //v2[i][j] = 0.0;
+                    double alpha = i * h;
+                    v2[i][j] = (1 - alpha) * v2[0][j] + alpha * v2[n][j];
                 }
             }
             // UpRelaxMethod 
@@ -519,12 +539,21 @@ namespace LAB_CHM
                 {
                     for (int i = 1; i < n; i++)
                     {
-                        prev = v2[i][j]; 
-                        temp = -w * (h2 * (v2[i + 1][j] + v2[i - 1][j]) + k2 * (v2[i][j + 1] + v2[i][j - 1]));
-                        temp = temp + (1 - w) * A * v2[i][j] + w * f[i][j];
-                        temp = temp / A;
+                        //prev = v2[i][j];
+                        //temp = -w * (h2 * (v2[i + 1][j] + v2[i - 1][j]) + k2 * (v2[i][j + 1] + v2[i][j - 1]));
+                        //temp = temp + (1 - w) * A * v2[i][j] + w * f[i][j];
+                        //temp = temp / A;
+
+                        prev = v2[i][j];
+                        temp = (-1.0 / (double)A) *
+                               ((1 - w) * (-1) * A * v2[i][j] +
+                                  w * (h2 * (v2[i + 1][j] + v2[i - 1][j]) + k2 * (v2[i][j + 1] + v2[i][j - 1])) +
+                                  w * f[i][j]
+                               );
+
+
                         currentEps = Math.Abs(prev - temp);
-                        if (currentEps > Eps_max) { Eps_max = currentEps; };
+                        if (currentEps > Eps_max) { Eps_max = currentEps; }
                         v2[i][j] = temp;
                     }
                 }
@@ -532,7 +561,7 @@ namespace LAB_CHM
                 currentIteration++;
 
                 // Обновляем прогресс
-                int percent = (int)((double)currentIteration / totalIterations * 100);
+                percent = (int)((double)currentIteration / totalIterations * 100);
                 progressFormv1.UpdateProgress(percent, $"Одинарный шаг: Итерация {p} из {N_max}... Точность: {Eps_max:F6}");
 
                 p++;
@@ -542,16 +571,19 @@ namespace LAB_CHM
             progressFormv1.Close();
             // nevyazka na vyhode
             temp = 0.0;
+            double evcR1 = 0.0;
             for (int j = 1; j < m; j++)
             {
                 for (int i = 1; i < n; i++)
                 {
-                    temp = A * v2[i][j] + h2 * (v2[i - 1][j] + v2[i + 1][j]) + k2 * (v2[i][j - 1] + v2[i][j + 1])  - f2(x[i], y[j]);
+                    //temp = A * v2[i][j] + h2 * (v2[i - 1][j] + v2[i + 1][j]) + k2 * (v2[i][j - 1] + v2[i][j + 1]) - f2(x[i], y[j]);
+                    temp = (-1) * A * v2[i][j] - h2 * (v2[i - 1][j] + v2[i + 1][j]) - k2 * (v2[i][j - 1] + v2[i][j + 1]) - f2(x[i], y[j]);
+
                     if (temp >= maxR1) maxR1 = Math.Abs(temp);
-                    //maxR1 += temp * temp;
+                    evcR1 += temp * temp;
                 }
             }
-            //maxR1 = Math.Sqrt(maxR1);
+            evcR1 = Math.Sqrt(evcR1);
 
             // solution whis step / 2
             n = 2 * n;
@@ -564,8 +596,8 @@ namespace LAB_CHM
 
             h = 1.0 / n;
             k = 1.0 / m;
-            h2 = -1.0 / (h * h); 
-            k2 = -1.0 / (k * k); 
+            h2 = 1.0 / (h * h);
+            k2 = 1.0 / (k * k);
             A = -2 * (h2 + k2);
 
             int p2 = 0;
@@ -624,7 +656,7 @@ namespace LAB_CHM
             prev = 0.0;
             currentEps = 0.0;
             double Eps_max2;
-            
+
             w = 0;// Convert.ToDouble(textBox29.Text);
             w_opt = optimal_W(n, m);
             MessageBox.Show("Ваш оптимальный для двойного шага W = " + w_opt.ToString());
@@ -646,18 +678,26 @@ namespace LAB_CHM
                     for (int i = 1; i < n; i++)
                     {
                         prev = v2_2[i][j];
-                        temp = -w * (h2 * (v2_2[i + 1][j] + v2_2[i - 1][j]) + k2 * (v2_2[i][j + 1] + v2_2[i][j - 1]));
-                        temp = temp + (1 - w) * A * v2_2[i][j] + w * f2(x[i], y[j]);
-                        temp = temp / A;
+                        //temp = -w * (h2 * (v2_2[i + 1][j] + v2_2[i - 1][j]) + k2 * (v2_2[i][j + 1] + v2_2[i][j - 1]));
+                        //temp = temp + (1 - w) * A * v2_2[i][j] + w * f2(x[i], y[j]);
+                        //temp = temp / A;
+
+                        temp = (-1.0 / (double)A) *
+                               ((1 - w) * (-1) * A * v2_2[i][j] +
+                                  w * (h2 * (v2_2[i + 1][j] + v2_2[i - 1][j]) + k2 * (v2_2[i][j + 1] + v2_2[i][j - 1])) +
+                                  w * f[i][j]
+                               );
+
                         currentEps = Math.Abs(prev - temp);
-                        if (currentEps > Eps_max2) { Eps_max2 = currentEps; };
+                        if (currentEps > Eps_max2) { Eps_max2 = currentEps; }
+                        ;
                         v2_2[i][j] = temp;
                     }
                 }
                 currentIteration++;
 
                 // Обновляем прогресс
-                int percent = (int)((double)currentIteration / totalIterations * 100);
+                percent = (int)((double)currentIteration / totalIterations * 100);
                 progressFormv2.UpdateProgress(percent, $"Двойной шаг: Итерация {p2} из {N_max}... Точность: {Eps_max2:F6}");
 
                 p2++;
@@ -668,115 +708,118 @@ namespace LAB_CHM
 
             // nevyazka na vyhode
             temp = 0.0;
+            double evcR = 0.0;
             for (int j = 1; j < m; j++)
             {
                 for (int i = 1; i < n; i++)
                 {
-                    temp = A * v2_2[i][j] + h2 * (v2_2[i - 1][j] + v2_2[i + 1][j]) + k2 * (v2_2[i][j - 1] + v2_2[i][j + 1]) - f2(x[i], y[j]);
+                    //temp = A * v2_2[i][j] + h2 * (v2_2[i - 1][j] + v2_2[i + 1][j]) + k2 * (v2_2[i][j - 1] + v2_2[i][j + 1]) - f2(x[i], y[j]);
+                    temp = (-1) * A * v2_2[i][j] - h2 * (v2_2[i - 1][j] + v2_2[i + 1][j]) - k2 * (v2_2[i][j - 1] + v2_2[i][j + 1]) - f2(x[i], y[j]);
+
                     if (temp >= maxR) maxR = Math.Abs(temp);
-                    //maxR += temp * temp;
+                    evcR += temp * temp;
                 }
             }
 
-            //maxR = Math.Sqrt(maxR);
+            evcR = Math.Sqrt(evcR);
 
             n = n / 2;
             m = m / 2;
             // table
 
-            dataGridView4.Rows.Clear();
-            dataGridView4.Columns.Clear();
+            //dataGridView4.Rows.Clear();
+            //dataGridView4.Columns.Clear();
 
-            dataGridView5.Rows.Clear();
-            dataGridView5.Columns.Clear();
+            //dataGridView5.Rows.Clear();
+            //dataGridView5.Columns.Clear();
 
-            dataGridView6.Rows.Clear();
-            dataGridView6.Columns.Clear();
+            //dataGridView6.Rows.Clear();
+            //dataGridView6.Columns.Clear();
 
-            dataGridView4.Columns.Add("C1", "");
-            dataGridView4.Columns[0].Width = 50;
-            dataGridView4.Columns[0].Frozen = true;
-            dataGridView4.Columns.Add("C2", "i");
-            dataGridView4.Columns[1].Width = 50;
-            dataGridView4.Columns[1].Frozen = true;
+            //dataGridView4.Columns.Add("C1", "");
+            //dataGridView4.Columns[0].Width = 50;
+            //dataGridView4.Columns[0].Frozen = true;
+            //dataGridView4.Columns.Add("C2", "i");
+            //dataGridView4.Columns[1].Width = 50;
+            //dataGridView4.Columns[1].Frozen = true;
 
-            dataGridView5.Columns.Add("C1", "");
-            dataGridView5.Columns[0].Width = 50;
-            dataGridView5.Columns[0].Frozen = true;
-            dataGridView5.Columns.Add("C2", "i");
-            dataGridView5.Columns[1].Width = 50;
-            dataGridView5.Columns[1].Frozen = true;
+            //dataGridView5.Columns.Add("C1", "");
+            //dataGridView5.Columns[0].Width = 50;
+            //dataGridView5.Columns[0].Frozen = true;
+            //dataGridView5.Columns.Add("C2", "i");
+            //dataGridView5.Columns[1].Width = 50;
+            //dataGridView5.Columns[1].Frozen = true;
 
-            dataGridView6.Columns.Add("C1", "");
-            dataGridView6.Columns[0].Width = 50;
-            dataGridView6.Columns[0].Frozen = true;
-            dataGridView6.Columns.Add("C2", "i");
-            dataGridView6.Columns[1].Width = 50;
-            dataGridView6.Columns[1].Frozen = true;
+            //dataGridView6.Columns.Add("C1", "");
+            //dataGridView6.Columns[0].Width = 50;
+            //dataGridView6.Columns[0].Frozen = true;
+            //dataGridView6.Columns.Add("C2", "i");
+            //dataGridView6.Columns[1].Width = 50;
+            //dataGridView6.Columns[1].Frozen = true;
 
-            using (var progressForm3v2 = new FormProgress1())
-            {
-                progressForm3v2.Show();
-                int totalColumns = n + 1;
+            //using (var progressForm3v2 = new FormProgress1())
+            //{
+            //    progressForm3v2.Show();
+            //    int totalColumns = n + 1;
 
-                for (int i = 0; i <= n; i++)
-                {
-                    // UI-операции в главном потоке
-                    this.Invoke((MethodInvoker)delegate
-                    {
-                        dataGridView4.Columns.Add($"Column{i}", $"Column {i}");
-                        dataGridView5.Columns.Add($"Column{i}", $"Column {i}");
-                        dataGridView6.Columns.Add($"Column{i}", $"Column {i}");
+            //    for (int i = 0; i <= n; i++)
+            //    {
+            //        // UI-операции в главном потоке
+            //        this.Invoke((MethodInvoker)delegate
+            //        {
+            //            dataGridView4.Columns.Add($"Column{i}", $"Column {i}");
+            //            dataGridView5.Columns.Add($"Column{i}", $"Column {i}");
+            //            dataGridView6.Columns.Add($"Column{i}", $"Column {i}");
 
-                        int fillWeight = 65535 / (n + 2);
-                        dataGridView4.Columns[i].FillWeight = fillWeight;
-                        dataGridView5.Columns[i].FillWeight = fillWeight;
-                        dataGridView6.Columns[i].FillWeight = fillWeight;
-                    });
+            //            int fillWeight = 65535 / (n + 2);
+            //            dataGridView4.Columns[i].FillWeight = fillWeight;
+            //            dataGridView5.Columns[i].FillWeight = fillWeight;
+            //            dataGridView6.Columns[i].FillWeight = fillWeight;
+            //        });
 
-                    // Обновление прогресса
-                    int percent = (int)((double)(i + 1) / totalColumns * 100);
-                    progressForm3v2.UpdateProgress(percent, $"Создание столбцов: {i + 1} из {totalColumns}");
+            //        // Обновление прогресса
+            //        int percent = (int)((double)(i + 1) / totalColumns * 100);
+            //        progressForm3v2.UpdateProgress(percent, $"Создание столбцов: {i + 1} из {totalColumns}");
 
-                    if (i % 10 == 0)
-                        Application.DoEvents();
-                }
+            //        if (i % 10 == 0)
+            //            Application.DoEvents();
+            //    }
 
-                progressForm3v2.Close();
-            }
+            //    progressForm3v2.Close();
+            //}
 
-            dataGridView4.Rows.Add("j", "Y\\X");  // Создание второй строки
-            dataGridView5.Rows.Add("j", "Y\\X");  // Создание второй строки
-            dataGridView6.Rows.Add("j", "Y\\X");  // Создание второй строки
-
-
-            for (int i = 0; i <= n; i++)               //Заполнение второй строки
-            {
+            //dataGridView4.Rows.Add("j", "Y\\X");  // Создание второй строки
+            //dataGridView5.Rows.Add("j", "Y\\X");  // Создание второй строки
+            //dataGridView6.Rows.Add("j", "Y\\X");  // Создание второй строки
 
 
-                //dataGridView4.Columns[i + 2].HeaderText = i.ToString();
-                //dataGridView5.Columns[i + 2].HeaderText = i.ToString();
-                //dataGridView6.Columns[i + 2].HeaderText = i.ToString();
-                //dataGridView4.Rows[0].Cells[i + 2].Value = x[2 * i];
-                //dataGridView5.Rows[0].Cells[i + 2].Value = x[2 * i];
-                //dataGridView6.Rows[0].Cells[i + 2].Value = x[2 * i];
+            //for (int i = 0; i <= n; i++)               //Заполнение второй строки
+            //{
 
-            }
-            for (int j = 0; j <= m; j++)          //Заполнение первых двух столбцов
-            {
-                dataGridView4.Rows.Add();
-                dataGridView5.Rows.Add();
-                dataGridView6.Rows.Add();
-                for (int i = 0; i <= 1; i++)
-                {
-                    dataGridView4.Rows[j + 1].Cells[0].Value = j;
-                    dataGridView4.Rows[j + 1].Cells[1].Value = y[2 * j];
-                    dataGridView5.Rows[j + 1].Cells[0].Value = j;
-                    dataGridView5.Rows[j + 1].Cells[1].Value = y[2 * j];
-                    dataGridView6.Rows[j + 1].Cells[0].Value = j;
-                    dataGridView6.Rows[j + 1].Cells[1].Value = y[2 * j];
-                }
-            }
+
+            //    dataGridView4.Columns[i + 2].HeaderText = i.ToString();
+            //    dataGridView5.Columns[i + 2].HeaderText = i.ToString();
+            //    dataGridView6.Columns[i + 2].HeaderText = i.ToString();
+            //    dataGridView4.Rows[0].Cells[i + 2].Value = x[2 * i];
+            //    dataGridView5.Rows[0].Cells[i + 2].Value = x[2 * i];
+            //    dataGridView6.Rows[0].Cells[i + 2].Value = x[2 * i];
+
+            //}
+            //for (int j = 0; j <= m; j++)          //Заполнение первых двух столбцов
+            //{
+            //    dataGridView4.Rows.Add();
+            //    dataGridView5.Rows.Add();
+            //    dataGridView6.Rows.Add();
+            //    for (int i = 0; i <= 1; i++)
+            //    {
+            //        dataGridView4.Rows[j + 1].Cells[0].Value = j;
+            //        dataGridView4.Rows[j + 1].Cells[1].Value = y[2 * j];
+            //        dataGridView5.Rows[j + 1].Cells[0].Value = j;
+            //        dataGridView5.Rows[j + 1].Cells[1].Value = y[2 * j];
+            //        dataGridView6.Rows[j + 1].Cells[0].Value = j;
+            //        dataGridView6.Rows[j + 1].Cells[1].Value = y[2 * j];
+            //    }
+            //}
 
             var progressForm2v2 = new FormProgress1();
             progressForm2v2.Show();
@@ -790,14 +833,14 @@ namespace LAB_CHM
                 {
                     Pogr = 0.0;
                     Pogr = Math.Abs(v2[i][j] - v2_2[i * 2][j * 2]);
-                    v2[i][j] = Math.Round(v2[i][j] * 1000) / 1000;
-                    v2_2[2 * i][2 * j] = Math.Round(v2_2[2 * i][2 * j] * 1000) / 1000;
+                    //v2[i][j] = Math.Round(v2[i][j] * 1000) / 1000;
+                    //v2_2[2 * i][2 * j] = Math.Round(v2_2[2 * i][2 * j] * 1000) / 1000;
 
-                    dataGridView4.Rows[j + 1].Cells[i + 2].Value = Math.Round(v2[i][j] * 100000) / 100000; ;
+                   // dataGridView4.Rows[j + 1].Cells[i + 2].Value = Math.Round(v2[i][j] * 100000) / 100000; ;
 
-                    dataGridView5.Rows[j + 1].Cells[i + 2].Value = Math.Round(v2_2[2 * i][2 * j] * 100000) / 100000;
+                    //dataGridView5.Rows[j + 1].Cells[i + 2].Value = Math.Round(v2_2[2 * i][2 * j] * 100000) / 100000;
 
-                    dataGridView6.Rows[j + 1].Cells[i + 2].Value = Pogr;
+                    //dataGridView6.Rows[j + 1].Cells[i + 2].Value = Pogr;
                     if (Pogr > MaxPogr)
                     {
                         MaxPogr = Pogr;
@@ -805,16 +848,16 @@ namespace LAB_CHM
                         yMax = y[2 * j];
                     }
                 }
-
-                // Обновление прогресса
-                processedCells++;
-                int percent = (int)((double)processedCells / totalCells * 100);
-                progressForm2v2.UpdateProgress(percent, $"Обработано: {processedCells} из {totalCells} ячеек");
-
-                // Принудительное обновление UI (чтобы окно не зависало)
-                if (processedCells % 100 == 0)
-                    Application.DoEvents();
             }
+            // Обновление прогресса
+            processedCells++;
+            percent = (int)((double)processedCells / totalCells * 100);
+            progressForm2v2.UpdateProgress(percent, $"Обработано: {processedCells} из {totalCells} ячеек");
+
+            // Принудительное обновление UI (чтобы окно не зависало)
+            if (processedCells % 100 == 0)
+                Application.DoEvents();
+
             progressForm2v2.Close();
 
             //МОЖЕТ БЫТЬ НА ДОРАБОТКЕ, НУЖНО ДЛЯ ЗАПОЛНЕНИЯ ТАБИЦЫ С ПОЛОВИННЫМ ШАГОМ ПО КАЖДОМУ ШАГУ
@@ -833,18 +876,20 @@ namespace LAB_CHM
             textBox18.Text = Convert.ToString(Eps_max);
             textBox19.Text = Convert.ToString(MaxF);
             textBox20.Text = Convert.ToString(maxR1);
+            textBox33.Text = Convert.ToString(evcR1);
 
             textBox26.Text = Convert.ToString(p2);
             textBox27.Text = Convert.ToString(Eps_max2);
             textBox21.Text = Convert.ToString(MaxF2);
             textBox22.Text = Convert.ToString(maxR);
+            textBox34.Text = Convert.ToString(evcR);
             textBox23.Text = Convert.ToString(MaxPogr);
             textBox24.Text = Convert.ToString(xMax);
             textBox25.Text = Convert.ToString(yMax);
 
-
+        }
         
-    }
+    
         private void button3_Click_1(object sender, EventArgs e)
         {
             int n = Convert.ToInt32(textBox1.Text);

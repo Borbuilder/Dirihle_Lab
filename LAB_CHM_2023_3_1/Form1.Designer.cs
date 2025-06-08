@@ -124,6 +124,12 @@
             this.label36 = new System.Windows.Forms.Label();
             this.label37 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
+            this.textBox29 = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.textBox33 = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.textBox34 = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -199,6 +205,8 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.label19);
+            this.groupBox4.Controls.Add(this.textBox29);
             this.groupBox4.Controls.Add(this.label10);
             this.groupBox4.Controls.Add(this.textBox16);
             this.groupBox4.Controls.Add(this.textBox15);
@@ -218,7 +226,7 @@
             this.groupBox4.Controls.Add(this.label11);
             this.groupBox4.Location = new System.Drawing.Point(242, 6);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(1083, 178);
+            this.groupBox4.Size = new System.Drawing.Size(1083, 216);
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Справка";
@@ -398,9 +406,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.tabControl2);
-            this.groupBox3.Location = new System.Drawing.Point(242, 190);
+            this.groupBox3.Location = new System.Drawing.Point(242, 228);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(1083, 613);
+            this.groupBox3.Size = new System.Drawing.Size(1083, 575);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Таблицы";
@@ -413,10 +421,10 @@
             this.tabControl2.Controls.Add(this.tabPage3);
             this.tabControl2.Controls.Add(this.tabPage4);
             this.tabControl2.Controls.Add(this.tabPage5);
-            this.tabControl2.Location = new System.Drawing.Point(6, 19);
+            this.tabControl2.Location = new System.Drawing.Point(6, 38);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(1071, 588);
+            this.tabControl2.Size = new System.Drawing.Size(1071, 531);
             this.tabControl2.TabIndex = 3;
             // 
             // tabPage3
@@ -425,7 +433,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1063, 562);
+            this.tabPage3.Size = new System.Drawing.Size(1063, 505);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "U(x,y)";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -433,9 +441,9 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(6, 6);
+            this.dataGridView1.Location = new System.Drawing.Point(6, -22);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(1054, 522);
+            this.dataGridView1.Size = new System.Drawing.Size(1054, 550);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
@@ -660,6 +668,10 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label21);
+            this.groupBox2.Controls.Add(this.textBox34);
+            this.groupBox2.Controls.Add(this.label20);
+            this.groupBox2.Controls.Add(this.textBox33);
             this.groupBox2.Controls.Add(this.textBox27);
             this.groupBox2.Controls.Add(this.textBox26);
             this.groupBox2.Controls.Add(this.label28);
@@ -683,9 +695,9 @@
             this.groupBox2.Controls.Add(this.label25);
             this.groupBox2.Controls.Add(this.label24);
             this.groupBox2.Controls.Add(this.label23);
-            this.groupBox2.Location = new System.Drawing.Point(231, 525);
+            this.groupBox2.Location = new System.Drawing.Point(231, 473);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(802, 221);
+            this.groupBox2.Size = new System.Drawing.Size(802, 273);
             this.groupBox2.TabIndex = 11;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Справка_2";
@@ -693,7 +705,7 @@
             // 
             // textBox27
             // 
-            this.textBox27.Location = new System.Drawing.Point(644, 118);
+            this.textBox27.Location = new System.Drawing.Point(641, 140);
             this.textBox27.Name = "textBox27";
             this.textBox27.ReadOnly = true;
             this.textBox27.Size = new System.Drawing.Size(142, 20);
@@ -701,7 +713,7 @@
             // 
             // textBox26
             // 
-            this.textBox26.Location = new System.Drawing.Point(254, 118);
+            this.textBox26.Location = new System.Drawing.Point(251, 140);
             this.textBox26.Name = "textBox26";
             this.textBox26.ReadOnly = true;
             this.textBox26.Size = new System.Drawing.Size(117, 20);
@@ -710,7 +722,7 @@
             // label28
             // 
             this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(500, 121);
+            this.label28.Location = new System.Drawing.Point(497, 143);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(138, 13);
             this.label28.TabIndex = 47;
@@ -719,7 +731,7 @@
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(8, 121);
+            this.label27.Location = new System.Drawing.Point(5, 143);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(242, 13);
             this.label27.TabIndex = 46;
@@ -727,7 +739,7 @@
             // 
             // textBox25
             // 
-            this.textBox25.Location = new System.Drawing.Point(644, 195);
+            this.textBox25.Location = new System.Drawing.Point(641, 249);
             this.textBox25.Name = "textBox25";
             this.textBox25.ReadOnly = true;
             this.textBox25.Size = new System.Drawing.Size(111, 20);
@@ -735,7 +747,7 @@
             // 
             // textBox24
             // 
-            this.textBox24.Location = new System.Drawing.Point(644, 169);
+            this.textBox24.Location = new System.Drawing.Point(641, 191);
             this.textBox24.Name = "textBox24";
             this.textBox24.ReadOnly = true;
             this.textBox24.Size = new System.Drawing.Size(111, 20);
@@ -743,7 +755,7 @@
             // 
             // textBox23
             // 
-            this.textBox23.Location = new System.Drawing.Point(452, 193);
+            this.textBox23.Location = new System.Drawing.Point(449, 247);
             this.textBox23.Name = "textBox23";
             this.textBox23.ReadOnly = true;
             this.textBox23.Size = new System.Drawing.Size(124, 20);
@@ -751,7 +763,7 @@
             // 
             // textBox22
             // 
-            this.textBox22.Location = new System.Drawing.Point(452, 169);
+            this.textBox22.Location = new System.Drawing.Point(449, 191);
             this.textBox22.Name = "textBox22";
             this.textBox22.ReadOnly = true;
             this.textBox22.Size = new System.Drawing.Size(124, 20);
@@ -759,7 +771,7 @@
             // 
             // textBox21
             // 
-            this.textBox21.Location = new System.Drawing.Point(370, 139);
+            this.textBox21.Location = new System.Drawing.Point(367, 161);
             this.textBox21.Name = "textBox21";
             this.textBox21.ReadOnly = true;
             this.textBox21.Size = new System.Drawing.Size(124, 20);
@@ -768,7 +780,7 @@
             // label33
             // 
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(618, 202);
+            this.label33.Location = new System.Drawing.Point(615, 256);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(20, 13);
             this.label33.TabIndex = 40;
@@ -777,7 +789,7 @@
             // label32
             // 
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(618, 176);
+            this.label32.Location = new System.Drawing.Point(615, 198);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(20, 13);
             this.label32.TabIndex = 39;
@@ -786,7 +798,7 @@
             // label31
             // 
             this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(8, 200);
+            this.label31.Location = new System.Drawing.Point(5, 254);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(346, 13);
             this.label31.TabIndex = 38;
@@ -795,7 +807,7 @@
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(8, 176);
+            this.label30.Location = new System.Drawing.Point(5, 198);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(443, 13);
             this.label30.TabIndex = 37;
@@ -804,7 +816,7 @@
             // label29
             // 
             this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(8, 146);
+            this.label29.Location = new System.Drawing.Point(5, 168);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(360, 13);
             this.label29.TabIndex = 36;
@@ -845,7 +857,7 @@
             // label45
             // 
             this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(8, 108);
+            this.label45.Location = new System.Drawing.Point(5, 130);
             this.label45.Name = "label45";
             this.label45.Size = new System.Drawing.Size(0, 13);
             this.label45.TabIndex = 31;
@@ -891,7 +903,7 @@
             this.groupBox5.Controls.Add(this.tabControl3);
             this.groupBox5.Location = new System.Drawing.Point(231, 6);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(1046, 513);
+            this.groupBox5.Size = new System.Drawing.Size(1046, 461);
             this.groupBox5.TabIndex = 6;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Таблицы";
@@ -904,7 +916,7 @@
             this.tabControl3.Location = new System.Drawing.Point(6, 19);
             this.tabControl3.Name = "tabControl3";
             this.tabControl3.SelectedIndex = 0;
-            this.tabControl3.Size = new System.Drawing.Size(1034, 488);
+            this.tabControl3.Size = new System.Drawing.Size(1034, 442);
             this.tabControl3.TabIndex = 3;
             // 
             // tabPage6
@@ -913,7 +925,7 @@
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(1026, 462);
+            this.tabPage6.Size = new System.Drawing.Size(1026, 416);
             this.tabPage6.TabIndex = 0;
             this.tabPage6.Text = "V(x,y)";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -923,7 +935,7 @@
             this.dataGridView4.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView4.Location = new System.Drawing.Point(6, 6);
             this.dataGridView4.Name = "dataGridView4";
-            this.dataGridView4.Size = new System.Drawing.Size(1014, 450);
+            this.dataGridView4.Size = new System.Drawing.Size(1014, 403);
             this.dataGridView4.TabIndex = 0;
             // 
             // tabPage7
@@ -1118,6 +1130,59 @@
             this.label38.TabIndex = 0;
             this.label38.Text = "Размеры сетки";
             // 
+            // textBox29
+            // 
+            this.textBox29.Location = new System.Drawing.Point(330, 175);
+            this.textBox29.Name = "textBox29";
+            this.textBox29.ReadOnly = true;
+            this.textBox29.Size = new System.Drawing.Size(198, 20);
+            this.textBox29.TabIndex = 19;
+            this.textBox29.UseWaitCursor = true;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(10, 176);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(314, 13);
+            this.label19.TabIndex = 20;
+            this.label19.Text = "Схема на сетке решена с невязкой (норма евклидова) R(p)=";
+            this.label19.UseWaitCursor = true;
+            // 
+            // textBox33
+            // 
+            this.textBox33.Location = new System.Drawing.Point(348, 114);
+            this.textBox33.Name = "textBox33";
+            this.textBox33.ReadOnly = true;
+            this.textBox33.Size = new System.Drawing.Size(161, 20);
+            this.textBox33.TabIndex = 50;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(8, 117);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(314, 13);
+            this.label20.TabIndex = 51;
+            this.label20.Text = "Схема на сетке решена с невязкой (норма евклидова) R(p)=";
+            // 
+            // textBox34
+            // 
+            this.textBox34.Location = new System.Drawing.Point(449, 217);
+            this.textBox34.Name = "textBox34";
+            this.textBox34.ReadOnly = true;
+            this.textBox34.Size = new System.Drawing.Size(124, 20);
+            this.textBox34.TabIndex = 52;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(5, 220);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(438, 13);
+            this.label21.TabIndex = 53;
+            this.label21.Text = "Схема на сетке с половинным шагом решена с невязкой (норма евклидова) R(p2) = ";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1255,6 +1320,12 @@
         private System.Windows.Forms.TextBox textBox32;
         private System.Windows.Forms.TextBox textBox31;
         private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.TextBox textBox29;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox textBox34;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox textBox33;
     }
 }
 
